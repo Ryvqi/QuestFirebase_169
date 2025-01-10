@@ -3,34 +3,45 @@ package com.example.firebase.repository
 import com.example.firebase.model.Mahasiswa
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.Query
-import com.google.firebase.firestore.toObject
 import kotlinx.coroutines.channels.awaitClose
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.callbackFlow
+import kotlinx.coroutines.tasks.await
 
 class NetworkMhsRepository(
     private val firestore: FirebaseFirestore
 ): MhsRepository {
+
     override suspend fun getAllMahasiswa(): Flow<List<Mahasiswa>> = callbackFlow {
         val mhsCollection = firestore.collection("Mahasiswa")
-            .orderBy("nim", Query.Direction.ASCENDING)
+            .orderBy("nim", Query.Direction.DESCENDING)
             .addSnapshotListener { value, error ->
                 if(value != null){
                     val mhsList = value.documents.mapNotNull {
-                        it.toObject(Mahasiswa::class.java)
+                        it.toObject(Mahasiswa::class.java)!!
                     }
-                    trySend(mhsList)
+                    trySend(mhsList) //trysend memberikan fungsi untuk mengirim data ke flow
                 }
             }
         awaitClose { mhsCollection.remove() }
     }
 
-    override suspend fun getMahasiswabynim(nim: String): Mahasiswa {
-        TODO("Not yet implemented")
+    override suspend fun getMahasiswabynim(nim: String): Flow<Mahasiswa> = callbackFlow {
+        val mhsDocument = firestore.collection("Mahasiswa")
+            .document(nim)
+            .addSnapshotListener { value, error ->
+                if (value != null){
+                    val mhs = value.toObject(Mahasiswa::class.java)!!
+                    trySend(mhs)
+                }
+            }
+        awaitClose{
+            mhsDocument.remove()
+        }
     }
 
     override suspend fun insertMahasiswa(mahasiswa: Mahasiswa) {
-        TODO("Not yet implemented")
+
     }
 
     override suspend fun updateMahasiswa(nim: String, mahasiswa: Mahasiswa) {
