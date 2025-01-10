@@ -9,6 +9,7 @@ import com.example.firebase.MhsApplication
 object PenyediaViewModel{
     val Factory = viewModelFactory {
         initializer { HomeViewModel(aplikasiKontak().container.mhsRepository) }
+        initializer { InsertViewModel(aplikasiKontak().container.mhsRepository) }
     }
 }
 
