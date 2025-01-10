@@ -45,7 +45,7 @@ class InsertViewModel (
             viewModelScope.launch {
                 uiState = FormState.Loading
                 try {
-                    mhs.insertMhs(uiEvent.insertUiEvent.toMhsModel())
+                    mhs.insertMahasiswa(uiEvent.insertUiEvent.toMhsModel())
                     uiState = FormState.Success("Data sukses disimpan")
                 } catch (e: Exception){
                     uiState = FormState.Error("Data gagal disimpan")
