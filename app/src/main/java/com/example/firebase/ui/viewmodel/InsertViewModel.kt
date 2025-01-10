@@ -1,5 +1,7 @@
 package com.example.firebase.ui.viewmodel
 
+import com.example.firebase.model.Mahasiswa
+
 sealed class FormState{
     object Idle: FormState()
     object Loading: FormState()
@@ -34,4 +36,14 @@ data class MahasiswaEvent(
     val alamat: String = "",
     val kelas: String = "",
     val angkatan: String = "",
+)
+
+//menyimpan input form kedalam entity
+fun MahasiswaEvent.toMhsModel(): Mahasiswa = Mahasiswa(
+    nim = nim,
+    nama = nama,
+    jeniskelamin = jeniskelamin,
+    alamat = alamat,
+    kelas = kelas,
+    angkatan = angkatan
 )
