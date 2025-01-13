@@ -152,7 +152,7 @@ fun FormMahasiswa(
     errorState: FormErrorState = FormErrorState(),
     modifier: Modifier = Modifier
 ){
-    val jeniskemain = listOf("Laki-laki, Perempuan")
+    val jeniskemain = listOf("Laki-laki", "Perempuan")
     val kelas = listOf("A", "B", "C", "D", "E")
 
     Column(
